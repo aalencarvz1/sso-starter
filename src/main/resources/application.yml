@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: ${APP_NAME:sso_starter}
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    properties:
+      hibernate:
+        dialect:
+          org:
+            hibernate:
+              dialect: ${JPA_DIALECT:MySQL8Dialect}
+  datasource:
+    sso:
+      jdbc-url: ${DB_JDBC_URL:jdbc:mysql://127.0.0.1:3306/my_sso}
+      username: ${DB_USER:root}
+      password: ${DB_PASSWORD:masterkey}
+      driver-class-name: ${DB_DRIVER_CLASS_NAME:com.mysql.cj.jdbc.Driver}
+  flyway:
+    enabled: false
+    baseline-on-migrate: true
+    locations: ${FLYWAY_LOCATIONS:classpath=db/migration}
+  mail:
+    host: ${MAIL_HOST:smtp.google.com}
+    port: ${MAIL_PORT:445}
+    username: ${MAIL_USERNAME:my_mail@google.com}
+    password: ${MAIL_PASSWORD:my_password}
+    protocol: ${MAIL_PROTOCOL:https}
+    properties:
+      mail:
+        smtp:
+          auth: ${SMTP_AUTH:true}
+          ssl:
+            enable: ${SMTP_SSL_ENABLE:true}
+            trust: "*"
+          starttls:
+            enable: ${SMTP_STARTTLS_ENABLE:false}
+sso:
+  server:
+    enabled: ${SSO-SERVER-ENABLED:true},
+    port: ${SSO-SERVER-PORT:3000}
+    local-port: ${SSO-SERVER-LOCAL_PORT:3001}
+    ssl:
+      enabled: ${SSO-SERVER-SSL-ENABLED:false}
+      key-store: ${SSO-SERVER-SSL-KEYSTORE-PATH:my_ssl_keystore_path}
+      key-store-password: ${SSO-SERVER-SSL-KEYSTORE-PASSWORD:my_ssl_keystore_password}
+      key-store-type: PKCS12
+  jwt:
+    enabled: ${SSO-JWT-ENABLED:true},
+    secret-key: ${SSO-JWT-SECRET-KEY:f324a2deac2fe6c1b8585fd3bae1df33956d6a918cfeffcbf772cb2ec4001bf8}
+    default-token-expiration: ${SSO-JWT-DEFAULT-TOKEN-EXPIRATION:60000}
+    default-refresh-token-expiration: ${SSO-JWT-DEFAULT-REFRESH-TOKEN-EXPIRATION:300000}
+  security:
+    password-rules:
+      min-length: ${SSO-SECURITY-PASSWORD-DEFAULT-MIN-LENGTH:8}
