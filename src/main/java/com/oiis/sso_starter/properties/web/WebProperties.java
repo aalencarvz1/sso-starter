@@ -18,7 +18,7 @@ public class WebProperties {
     private boolean enabled = true;
     private int port = 3000;
     private Integer localPort = null;
-    private final Ssl ssl = new Ssl();
+    private Ssl ssl = new Ssl();
 
     @Getter
     @Setter

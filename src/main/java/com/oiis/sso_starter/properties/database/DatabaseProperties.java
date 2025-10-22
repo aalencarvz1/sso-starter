@@ -17,9 +17,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class DatabaseProperties {
 
     private boolean enabled = true;
-    private final Datasource datasource = new Datasource();
-    private final Hibernate hibernate = new Hibernate();
-    private final Flyway flyway = new Flyway();
+    private Datasource datasource = new Datasource();
+    private Hibernate hibernate = new Hibernate();
+    private Flyway flyway = new Flyway();
 
 
     @Getter

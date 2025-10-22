@@ -43,10 +43,8 @@ public class MailAutoConfiguration {
         mailSender.setPort(props.getPort());
         mailSender.setUsername(props.getUsername());
         mailSender.setPassword(props.getPassword());
-
-        Properties javaMailProps = mailSender.getJavaMailProperties();
-        javaMailProps.putAll(props.getProperties());
-
+        mailSender.setProtocol(props.getProtocol());
+        mailSender.getJavaMailProperties().putAll(props.getProperties());
         return mailSender;
     }
 }

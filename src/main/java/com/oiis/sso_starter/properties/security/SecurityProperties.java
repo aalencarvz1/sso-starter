@@ -28,7 +28,7 @@ public class SecurityProperties {
             "/auth/refresh_token"
     );
 
-    private final PasswordRules passwordRules = new PasswordRules();
+    private PasswordRules passwordRules = new PasswordRules();
 
 
 

@@ -19,10 +19,11 @@ import java.util.Properties;
 public class MailProperties {
 
     private boolean enabled = true;
-    private final String host = "";
-    private final int port = 445;
-    private final String username = "";
-    private final String password = "";
-    private final Properties properties = new Properties();
+    private String host = "";
+    private int port = 445;
+    private String username = "";
+    private String password = "";
+    private String protocol = "";
+    private Properties properties = new Properties();
 
 }
