@@ -4,7 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-
+/**
+ * web properties
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @ConfigurationProperties(prefix = "sso.server")
 @Getter
 @Setter

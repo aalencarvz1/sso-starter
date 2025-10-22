@@ -6,6 +6,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
 
+
+/**
+ * security properties
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @ConfigurationProperties(prefix = "sso.security")
 @Getter
 @Setter

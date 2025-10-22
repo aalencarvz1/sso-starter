@@ -16,6 +16,13 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+
+/**
+ * jwt service
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @Service
 @EnableConfigurationProperties(JwtProperties.class)
 public class JwtService {

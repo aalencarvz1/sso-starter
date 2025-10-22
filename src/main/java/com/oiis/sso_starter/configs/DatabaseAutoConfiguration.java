@@ -20,6 +20,12 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * DatabaseAutoConfiguration
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @Configuration(proxyBeanMethods = false)
 @EnableJpaRepositories(
         basePackageClasses = UsersRepository.class,
@@ -30,12 +36,23 @@ import java.util.Map;
 @EnableConfigurationProperties(DatabaseProperties.class)
 public class DatabaseAutoConfiguration {
 
+    /**
+     * properties
+     */
     private final DatabaseProperties properties;
 
+    /**
+     * default constructor
+     * @param properties the properties
+     */
     public DatabaseAutoConfiguration(DatabaseProperties properties) {
         this.properties = properties;
     }
 
+    /**
+     * datasource
+     * @return the datasource
+     */
     @Bean
     @Primary
     public DataSource ssoDataSource() {
@@ -47,6 +64,12 @@ public class DatabaseAutoConfiguration {
                 .build();
     }
 
+    /**
+     * entity manager factory
+     *
+     * @param builder the builder
+     * @return the factory bean
+     */
     @Bean(name = "ssoEntityManagerFactory")
     @Primary
     public LocalContainerEntityManagerFactoryBean ssoEntityManagerFactory(EntityManagerFactoryBuilder builder) {
@@ -63,6 +86,12 @@ public class DatabaseAutoConfiguration {
                 .build();
     }
 
+    /**
+     * transaction manager
+     *
+     * @param ssoEntityManagerFactory the factory
+     * @return the transaction manager
+     */
     @Bean(name = "ssoTransactionManager")
     @Primary
     public PlatformTransactionManager ssoTransactionManager(

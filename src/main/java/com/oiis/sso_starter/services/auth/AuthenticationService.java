@@ -3,7 +3,7 @@ package com.oiis.sso_starter.services.auth;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oiis.libs.java.spring.commons.DefaultDataSwap;
-import com.oiis.sso_starter.controllers.rest.auth.UserRequestDTO;
+import com.oiis.sso_starter.controllers.rest.auth.*;
 import com.oiis.sso_starter.database.entities.sso.RecordStatus;
 import com.oiis.sso_starter.database.entities.sso.User;
 import com.oiis.sso_starter.database.repositories.sso.UsersRepository;
@@ -25,6 +25,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+
+/**
+ * authentication service
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @Service
 @EnableConfigurationProperties(SecurityProperties.class)
 public class AuthenticationService {
@@ -121,7 +128,7 @@ public class AuthenticationService {
         return result;
     }
 
-    /*public DefaultDataSwap passworRulesCheck(String password) {
+    public DefaultDataSwap passworRulesCheck(String password) {
         DefaultDataSwap result = new DefaultDataSwap();
         try {
             if (StringUtils.hasText(password)) {
@@ -280,6 +287,6 @@ public class AuthenticationService {
             result.setException(e);
         }
         return result;
-    }*/
+    }
 
 }

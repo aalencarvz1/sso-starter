@@ -7,6 +7,12 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * user
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 @Entity

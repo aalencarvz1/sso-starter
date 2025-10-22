@@ -8,6 +8,12 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * base entity of sso
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @MappedSuperclass
 @Getter
 @Setter

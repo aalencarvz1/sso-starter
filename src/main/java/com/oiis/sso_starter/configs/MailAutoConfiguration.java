@@ -14,14 +14,27 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
+
+/**
+ * MailAutoConfiguration
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(MailProperties.class)
 @ConditionalOnProperty(prefix = "sso.mail", name = "enabled", havingValue = "true", matchIfMissing = true)
-//@ConditionalOnClass(name = "org.springframework.mail.javamail.JavaMailSender")
 @Import(org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration.class)
 @ComponentScan(basePackages = "com.oiis.sso_starter.services.mail")
 public class MailAutoConfiguration {
 
+    /**
+     * mail sender configure
+     *
+     * @param props the properties
+     * @return the mail sender instance
+     * @throws MessagingException throws on exception
+     */
     @Bean
     @ConditionalOnMissingBean
     public JavaMailSender ssoMailSender(MailProperties props) throws MessagingException {

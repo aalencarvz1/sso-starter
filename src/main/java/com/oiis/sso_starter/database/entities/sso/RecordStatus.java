@@ -7,6 +7,12 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * record status
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @Entity
 @Table(name = "record_status")
 @Getter

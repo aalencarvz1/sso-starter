@@ -5,6 +5,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * users repository
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @Repository
 public interface UsersRepository extends BaseSsoRepository<User, Long> {
 

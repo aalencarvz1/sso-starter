@@ -15,7 +15,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * WebAutoConfiguration
  * Configure server to allow run with external port configured on application.yml or .env file and different local port, wich no requires https
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(prefix = "sso.server", name = "enabled", havingValue = "true", matchIfMissing = true)
@@ -32,7 +36,12 @@ public class WebAutoConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(WebAutoConfiguration.class);
 
 
-
+    /**
+     * customizer webserver
+     *
+     * @param props the properties
+     * @return the customizer instance
+     */
     @Bean
     @ConditionalOnMissingBean(name = "ssoWebServerCustomizer")
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> ssoWebServerCustomizer(WebProperties props) {

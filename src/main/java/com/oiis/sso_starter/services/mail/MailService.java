@@ -8,6 +8,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+/**
+ * mail service
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @Service
 @EnableConfigurationProperties(MailProperties.class)
 public class MailService {

@@ -11,6 +11,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
+/**
+ * FlywayAfterHibernate
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(prefix = "sso.database", name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(DatabaseProperties.class)
@@ -18,12 +24,25 @@ public class FlywayAfterHibernate {
 
     private static final Logger logger = LoggerFactory.getLogger(FlywayAfterHibernate.class);
 
+    /**
+     * the properties
+     */
     private final DatabaseProperties properties;
 
+    /**
+     * default constructor
+     *
+     * @param properties the properties
+     */
     public FlywayAfterHibernate(DatabaseProperties properties) {
         this.properties = properties;
     }
 
+    /**
+     * flyway load
+     *
+     * @return the flyway instance
+     */
     @Bean
     public Flyway flyway() {
         return Flyway.configure()
@@ -37,6 +56,12 @@ public class FlywayAfterHibernate {
                 .load();
     }
 
+    /**
+     * run flyway migration
+     *
+     * @param flyway the flyway instance
+     * @return the runner
+     */
     @Bean
     public ApplicationRunner runFlywayAfterHibernate(Flyway flyway) {
         return args -> {

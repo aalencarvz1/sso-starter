@@ -16,6 +16,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+
+/**
+ * SecurityAutoConfiguration
+ *
+ * @author aalencarvz1
+ * @version 1.0.0
+ */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(prefix = "sso.security", name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(SecurityProperties.class)
@@ -23,12 +30,25 @@ public class SecurityAutoConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityAutoConfiguration.class);
 
+    /**
+     * the properties
+     */
     private final SecurityProperties properties;
 
+    /**
+     * default constructor
+     *
+     * @param properties the properties
+     */
     public SecurityAutoConfiguration(SecurityProperties properties) {
         this.properties = properties;
     }
 
+    /**
+     * cors configure
+     *
+     * @return the cors configuration
+     */
     @Bean
     @ConditionalOnMissingBean(CorsConfigurationSource.class)
     public CorsConfigurationSource corsConfigurationSource() {
@@ -42,6 +62,13 @@ public class SecurityAutoConfiguration {
         return source;
     }
 
+    /**
+     * filter chain
+     *
+     * @param http the http security
+     * @return the security filter chain instance
+     * @throws Exception throw on exception
+     */
     @Bean
     @ConditionalOnMissingBean(SecurityFilterChain.class)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
