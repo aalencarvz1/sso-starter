@@ -1,32 +1,40 @@
 package com.oiis.sso_starter.services.mail;
 
-import com.oiis.sso_starter.controllers.mail.MailController;
+import com.oiis.sso_starter.properties.mail.MailProperties;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
+@EnableConfigurationProperties(MailProperties.class)
 public class MailService {
+
+    private final MailProperties properties;
+
     @Autowired
     private JavaMailSender mailSender;
 
-    @Autowired
-    private MailController mailController;
+    public MailService(MailProperties properties) {
+        this.properties = properties;
+    }
 
-    @Value("${spring.mail.username}")
-    private String mailFrom;
+    public boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        return email != null && email.matches(emailRegex);
+    }
+
 
     public void sendEmail(String to, String subject, String text, String html) throws Exception {
-        if (mailController.isValidEmail(to)) {
+        if (isValidEmail(to)) {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(text, html);
-            helper.setFrom(mailFrom); // configure conforme seu SMTP
+            helper.setFrom(properties.getUsername()); // configure conforme seu SMTP
             mailSender.send(message);
         } else {
             throw new Exception("invalid mail");

@@ -3,16 +3,17 @@ package com.oiis.sso_starter.services.auth;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oiis.libs.java.spring.commons.DefaultDataSwap;
-import com.oiis.sso_starter.controllers.rest.auth.*;
+import com.oiis.sso_starter.controllers.rest.auth.UserRequestDTO;
 import com.oiis.sso_starter.database.entities.sso.RecordStatus;
 import com.oiis.sso_starter.database.entities.sso.User;
 import com.oiis.sso_starter.database.repositories.sso.UsersRepository;
+import com.oiis.sso_starter.properties.security.SecurityProperties;
 import com.oiis.sso_starter.services.jwt.JwtService;
 import com.oiis.sso_starter.services.mail.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,9 +26,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@EnableConfigurationProperties(SecurityProperties.class)
 public class AuthenticationService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+
+    private final SecurityProperties properties;
+
 
     @Autowired
     JwtService jwtService;
@@ -41,10 +46,11 @@ public class AuthenticationService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Value("${security.password-rules.min-length}")
-    private Integer minPassordLength;
-
     private static final PasswordEncoder encoder = new BCryptPasswordEncoder();
+
+    public AuthenticationService(SecurityProperties properties) {
+        this.properties = properties;
+    }
 
     private DefaultDataSwap getAuthDataResult(
             Optional<User> user,
@@ -115,13 +121,13 @@ public class AuthenticationService {
         return result;
     }
 
-    public DefaultDataSwap passworRulesCheck(String password) {
+    /*public DefaultDataSwap passworRulesCheck(String password) {
         DefaultDataSwap result = new DefaultDataSwap();
         try {
             if (StringUtils.hasText(password)) {
-                if (password.length() < minPassordLength) {
+                if (password.length() < properties.getPasswordRules().getMinLength()) {
                     result.httpStatusCode = HttpStatus.EXPECTATION_FAILED.value();
-                    result.message = "password length less than " + minPassordLength + " characters";
+                    result.message = "password length less than " + properties.getPasswordRules().getMinLength() + " characters";
                 } else {
                     result.success = true;
                 }
@@ -274,6 +280,6 @@ public class AuthenticationService {
             result.setException(e);
         }
         return result;
-    }
+    }*/
 
 }

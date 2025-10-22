@@ -1,8 +1,11 @@
 package com.oiis.sso_starter.configs;
 
+import com.oiis.sso_starter.properties.security.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,19 +16,18 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnProperty(prefix = "sso.security", name = "enabled", havingValue = "true", matchIfMissing = true)
+@EnableConfigurationProperties(SecurityProperties.class)
 public class SecurityAutoConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityAutoConfiguration.class);
 
-    public static final List<String> PUBLIC_ENDPOINTS = List.of(
-            "/auth/login",
-            "/auth/register",
-            "/auth/check_token",
-            "/auth/send_email_recover_password",
-            "/auth/password_change",
-            "/auth/refresh_token"
-    );
+    private final SecurityProperties properties;
+
+    public SecurityAutoConfiguration(SecurityProperties properties) {
+        this.properties = properties;
+    }
 
     @Bean
     @ConditionalOnMissingBean(CorsConfigurationSource.class)
@@ -47,7 +49,7 @@ public class SecurityAutoConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> {}) // enable CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PUBLIC_ENDPOINTS.toArray(new String[0]))
+                        .requestMatchers(properties.getPublicEndPoints().toArray(new String[0]))
                         .permitAll()
                         .anyRequest()
                         .denyAll()

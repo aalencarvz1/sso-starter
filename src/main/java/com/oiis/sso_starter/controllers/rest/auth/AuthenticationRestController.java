@@ -18,7 +18,8 @@ public class AuthenticationRestController {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationRestController.class);
 
     @Autowired
-    AuthenticationService authenticationService;
+    private AuthenticationService authenticationService;
+
 
     @PostMapping("/login")
     public ResponseEntity<DefaultDataSwap> login(@RequestBody(required = false) UserRequestDTO userDto) {
@@ -26,7 +27,7 @@ public class AuthenticationRestController {
         return authenticationService.login(userDto).sendHttpResponse();
     }
 
-    @PostMapping("/register")
+    /*@PostMapping("/register")
     public ResponseEntity<DefaultDataSwap> register(@RequestBody(required = false) UserRequestDTO userDto) {
         logger.debug("requested register {}",userDto.getEmail());
         return authenticationService.register(userDto).sendHttpResponse();
@@ -54,5 +55,5 @@ public class AuthenticationRestController {
     public ResponseEntity<DefaultDataSwap> passwordChange(@RequestBody(required = false) PasswordChangeRequestDTO passwordChangeRequestDTO) {
         logger.debug("requested password_change {}",passwordChangeRequestDTO.getToken());
         return authenticationService.passwordChangeFromDto(passwordChangeRequestDTO).sendHttpResponse();
-    }
+    }*/
 }

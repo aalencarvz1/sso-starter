@@ -1,9 +1,9 @@
 package com.oiis.sso_starter.configs;
 
-import com.oiis.sso_starter.controllers.rest.auth.AuthenticationRestController;
 import com.oiis.sso_starter.properties.web.WebProperties;
 import org.apache.catalina.connector.Connector;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -11,23 +11,31 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.Ssl;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * Configure server to allow run with external port configured on application.yml or .env file and different local port, wich no requires https
  */
 @Configuration(proxyBeanMethods = false)
-//@ConditionalOnClass(name = "org.springframework.web.bind.annotation.RestController")
-@ConditionalOnProperty(prefix = "sso.web", name = "enabled", havingValue = "true", matchIfMissing = true)
-@ConditionalOnClass(TomcatServletWebServerFactory.class)
+@ConditionalOnProperty(prefix = "sso.server", name = "enabled", havingValue = "true", matchIfMissing = true)
+//@ConditionalOnClass({TomcatServletWebServerFactory.class})
 @EnableConfigurationProperties(WebProperties.class)
-@Import({ AuthenticationRestController.class/*, UserController.class*/ })
+@ComponentScan(basePackages = {
+        "com.oiis.sso_starter.services.mail",
+        "com.oiis.sso_starter.services.jwt",
+        "com.oiis.sso_starter.services.auth",
+        "com.oiis.sso_starter.controllers.rest.auth"
+})
 public class WebAutoConfiguration {
 
+    private static final Logger logger = LoggerFactory.getLogger(WebAutoConfiguration.class);
+
+
+
     @Bean
-    @ConditionalOnMissingBean
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> servletContainer(WebProperties props) {
+    @ConditionalOnMissingBean(name = "ssoWebServerCustomizer")
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> ssoWebServerCustomizer(WebProperties props) {
         return server -> {
             server.setPort(props.getPort());
 

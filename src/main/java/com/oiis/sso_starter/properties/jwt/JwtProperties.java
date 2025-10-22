@@ -1,38 +1,16 @@
 package com.oiis.sso_starter.properties.jwt;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Component
+@ConfigurationProperties(prefix = "sso.jwt")
+@Getter
+@Setter
 public class JwtProperties {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtProperties.class);
-
-    private final String secretKey;
-    private final Long defaultTokenExpiration;
-    private final Long defaultRefreshTokenExpiration;
-
-    public JwtProperties(
-            @Value("${sso.jwt.secret-key}") String secretKey,
-            @Value("${sso.jwt.default-token-expiration}") Long defaultTokenExpiration,
-            @Value("${sso.jwt.default-refresh-token-expiration}") Long defaultRefreshTokenExpiration
-    ) {
-        this.secretKey = secretKey;
-        this.defaultTokenExpiration = defaultTokenExpiration;
-        this.defaultRefreshTokenExpiration = defaultRefreshTokenExpiration;
-    }
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public Long getDefaultTokenExpiration() {
-        return defaultTokenExpiration;
-    }
-
-    public Long getDefaultRefreshTokenExpiration() {
-        return defaultRefreshTokenExpiration;
-    }
+    private boolean enabled = true;
+    private final String secretKey = "f324a2deac2fe6c1b8585fd3bae1df33956d6a918cfeffcbf772cb2ec4001bf8";
+    private final Long defaultTokenExpiration = 60000L;
+    private final Long defaultRefreshTokenExpiration = 300000L;
 }
