@@ -159,3 +159,4 @@ GitHub: [@aalencarvz1](https://github.com/aalencarvz1)
 ---
 
 > 🔗 Published on [Maven Central (Sonatype)](https://central.sonatype.com/artifact/io.github.aalencarvz1.libs.security.sso/sso-starter)
+
