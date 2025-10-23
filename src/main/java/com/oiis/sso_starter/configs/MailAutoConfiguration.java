@@ -49,7 +49,6 @@ public class MailAutoConfiguration {
             result.setPassword(props.getPassword());
             result.setProtocol(props.getProtocol());
             result.getJavaMailProperties().putAll(props.getProperties());
-            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoMailSender");
         } catch (Exception e) {
             e.printStackTrace();
         }

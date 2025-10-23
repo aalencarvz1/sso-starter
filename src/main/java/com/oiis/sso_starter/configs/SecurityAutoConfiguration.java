@@ -41,7 +41,9 @@ public class SecurityAutoConfiguration {
      * @param properties the properties
      */
     public SecurityAutoConfiguration(SecurityProperties properties) {
+        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "SecurityAutoConfiguration");
         this.properties = properties;
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "SecurityAutoConfiguration");
     }
 
     /**
@@ -50,18 +52,23 @@ public class SecurityAutoConfiguration {
      * @return the cors configuration
      */
     @Bean
-    //@ConditionalOnMissingBean(CorsConfigurationSource.class)
+    @ConditionalOnMissingBean(name = "corsConfigurationSource")
     public CorsConfigurationSource corsConfigurationSource() {
-        logger.debug("initializing xxxxxxxxxxxxxx cors configured");
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.setAllowedMethods(List.of("*"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        logger.debug("xxxxxxxxxxxxxx cors configured");
-        return source;
+        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "corsConfigurationSource");
+        UrlBasedCorsConfigurationSource result = null;
+        try {
+            CorsConfiguration configuration = new CorsConfiguration();
+            configuration.setAllowedOriginPatterns(List.of("*"));
+            configuration.setAllowedMethods(List.of("*"));
+            configuration.setAllowedHeaders(List.of("*"));
+            configuration.setAllowCredentials(true);
+            result = new UrlBasedCorsConfigurationSource();
+            result.registerCorsConfiguration("/**", configuration);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "corsConfigurationSource");
+        return result;
     }
 
     /**
@@ -72,18 +79,27 @@ public class SecurityAutoConfiguration {
      * @throws Exception throw on exception
      */
     @Bean
-    @ConditionalOnMissingBean(SecurityFilterChain.class)
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> {}) // enable CORS
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(properties.getPublicEndPoints().toArray(new String[0]))
-                        .permitAll()
-                        .anyRequest()
-                        .denyAll()
-                );
-
-        return http.build();
+    @ConditionalOnMissingBean(name = "ssoFilterChain")
+    public SecurityFilterChain ssoFilterChain(HttpSecurity http) throws Exception {
+        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "ssoFilterChain");
+        SecurityFilterChain result = null;
+        try {
+            http
+                    .csrf(csrf -> csrf.disable())
+                    .cors(cors -> {
+                    }) // enable CORS
+                    .authorizeHttpRequests(auth -> auth
+                            .requestMatchers(properties.getPublicEndPoints().toArray(new String[0]))
+                            .permitAll()
+                            .anyRequest()
+                            .denyAll()
+                    );
+            result = http.build();
+            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoFilterChain");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "ssoFilterChain");
+        return result;
     }
 }

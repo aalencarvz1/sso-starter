@@ -64,7 +64,7 @@ public class FlywayAfterHibernate {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        logger.debug("END {}.{}", this.getClass().getSimpleName(), "flyway");
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "ssoFlyway");
         return result;
     }
 
