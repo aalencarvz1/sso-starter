@@ -72,7 +72,6 @@ public class DatabaseAutoConfiguration {
                     .password(properties.getDatasource().getPassword())
                     .driverClassName(properties.getDatasource().getDriverClassName())
                     .build();
-            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoDataSource");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -102,7 +101,6 @@ public class DatabaseAutoConfiguration {
                     .persistenceUnit("sso")
                     .properties(jpaProps)
                     .build();
-            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoEntityManagerFactory");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -124,7 +122,6 @@ public class DatabaseAutoConfiguration {
         JpaTransactionManager result = null;
         try {
             result = new JpaTransactionManager(ssoEntityManagerFactory);
-            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoTransactionManager");
         } catch (Exception e) {
             e.printStackTrace();
         }

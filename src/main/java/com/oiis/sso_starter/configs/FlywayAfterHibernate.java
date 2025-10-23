@@ -5,6 +5,7 @@ import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +36,9 @@ public class FlywayAfterHibernate {
      * @param properties the properties
      */
     public FlywayAfterHibernate(DatabaseProperties properties) {
+        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "FlywayAfterHibernate");
         this.properties = properties;
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "FlywayAfterHibernate");
     }
 
     /**
@@ -44,16 +47,26 @@ public class FlywayAfterHibernate {
      * @return the flyway instance
      */
     @Bean
-    public Flyway flyway() {
-        return Flyway.configure()
-                .dataSource(
-                        properties.getDatasource().getJdbcUrl(),
-                        properties.getDatasource().getUsername(),
-                        properties.getDatasource().getPassword()
-                )
-                .locations(properties.getFlyway().getLocations())
-                .baselineOnMigrate(properties.getFlyway().isBaselineOnMigrate())
-                .load();
+    @ConditionalOnMissingBean(name = "ssoFlyway")
+    public Flyway ssoFlyway() {
+        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "ssoFlyway");
+        Flyway result = null;
+        try {
+            result = Flyway.configure()
+                    .dataSource(
+                            properties.getDatasource().getJdbcUrl(),
+                            properties.getDatasource().getUsername(),
+                            properties.getDatasource().getPassword()
+                    )
+                    .locations(properties.getFlyway().getLocations())
+                    .baselineOnMigrate(properties.getFlyway().isBaselineOnMigrate())
+                    .load();
+            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoFlyway");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "flyway");
+        return result;
     }
 
     /**
@@ -63,10 +76,26 @@ public class FlywayAfterHibernate {
      * @return the runner
      */
     @Bean
-    public ApplicationRunner runFlywayAfterHibernate(Flyway flyway) {
-        return args -> {
-            flyway.migrate();
-            logger.debug("Flyway migrations executed after Hibernate initialization.");
-        };
+    @ConditionalOnMissingBean(name = "ssoRunFlywayAfterHibernate")
+    public ApplicationRunner ssoRunFlywayAfterHibernate(Flyway flyway) {
+        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "ssoRunFlywayAfterHibernate");
+        ApplicationRunner result = null;
+        try {
+            result = args -> {
+                logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "ssoRunFlywayAfterHibernate.ApplicationRunner");
+                try {
+                    flyway.migrate();
+                    logger.debug("Flyway migrations executed after Hibernate initialization.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                logger.debug("END {}.{}", this.getClass().getSimpleName(), "ssoRunFlywayAfterHibernate.ApplicationRunner");
+            };
+            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoRunFlywayAfterHibernate");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "ssoRunFlywayAfterHibernate");
+        return result;
     }
 }
