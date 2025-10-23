@@ -49,6 +49,8 @@ public class SecurityAutoConfiguration {
     /**
      * cors configure
      *
+     * cannot change name of this method, spring internally filter this method by yout name, exactly this name
+     *
      * @return the cors configuration
      */
     @Bean

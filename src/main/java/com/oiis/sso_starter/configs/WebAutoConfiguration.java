@@ -45,22 +45,30 @@ public class WebAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "ssoWebServerCustomizer")
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> ssoWebServerCustomizer(WebProperties props) {
-        return server -> {
-            server.setPort(props.getPort());
+        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "ssoWebServerCustomizer");
+        WebServerFactoryCustomizer<TomcatServletWebServerFactory> result = null;
+        try {
+            result = server -> {
+                server.setPort(props.getPort());
 
-            if (props.getSsl().isEnabled()) {
-                Ssl ssl = new Ssl();
-                ssl.setEnabled(true);
-                ssl.setKeyStore(props.getSsl().getKeyStore());
-                ssl.setKeyStorePassword(props.getSsl().getKeyStorePassword());
-                server.setSsl(ssl);
-            }
+                if (props.getSsl().isEnabled()) {
+                    Ssl ssl = new Ssl();
+                    ssl.setEnabled(true);
+                    ssl.setKeyStore(props.getSsl().getKeyStore());
+                    ssl.setKeyStorePassword(props.getSsl().getKeyStorePassword());
+                    server.setSsl(ssl);
+                }
 
-            if (props.getLocalPort() != null) {
-                Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
-                connector.setPort(props.getLocalPort());
-                server.addAdditionalTomcatConnectors(connector);
-            }
-        };
+                if (props.getLocalPort() != null) {
+                    Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
+                    connector.setPort(props.getLocalPort());
+                    server.addAdditionalTomcatConnectors(connector);
+                }
+            };
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "ssoWebServerCustomizer");
+        return result;
     }
 }
