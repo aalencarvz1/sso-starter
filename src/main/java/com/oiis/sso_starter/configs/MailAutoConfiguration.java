@@ -2,6 +2,8 @@ package com.oiis.sso_starter.configs;
 
 import com.oiis.sso_starter.properties.mail.MailProperties;
 import jakarta.mail.MessagingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,23 +28,32 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @ComponentScan(basePackages = "com.oiis.sso_starter.services.mail")
 public class MailAutoConfiguration {
 
+    private static final Logger logger = LoggerFactory.getLogger(MailAutoConfiguration.class);
+
     /**
      * mail sender configure
      *
      * @param props the properties
      * @return the mail sender instance
-     * @throws MessagingException throws on exception
      */
     @Bean
-    @ConditionalOnMissingBean
-    public JavaMailSender ssoMailSender(MailProperties props) throws MessagingException {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(props.getHost());
-        mailSender.setPort(props.getPort());
-        mailSender.setUsername(props.getUsername());
-        mailSender.setPassword(props.getPassword());
-        mailSender.setProtocol(props.getProtocol());
-        mailSender.getJavaMailProperties().putAll(props.getProperties());
-        return mailSender;
+    @ConditionalOnMissingBean(name = "ssoMailSender")
+    public JavaMailSender ssoMailSender(MailProperties props) {
+        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "ssoMailSender");
+        JavaMailSenderImpl result = null;
+        try {
+            result = new JavaMailSenderImpl();
+            result.setHost(props.getHost());
+            result.setPort(props.getPort());
+            result.setUsername(props.getUsername());
+            result.setPassword(props.getPassword());
+            result.setProtocol(props.getProtocol());
+            result.getJavaMailProperties().putAll(props.getProperties());
+            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoMailSender");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "ssoMailSender");
+        return result;
     }
 }

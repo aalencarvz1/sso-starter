@@ -61,7 +61,6 @@ public class FlywayAfterHibernate {
                     .locations(properties.getFlyway().getLocations())
                     .baselineOnMigrate(properties.getFlyway().isBaselineOnMigrate())
                     .load();
-            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoFlyway");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -91,7 +90,6 @@ public class FlywayAfterHibernate {
                 }
                 logger.debug("END {}.{}", this.getClass().getSimpleName(), "ssoRunFlywayAfterHibernate.ApplicationRunner");
             };
-            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoRunFlywayAfterHibernate");
         } catch (Exception e) {
             e.printStackTrace();
         }
