@@ -66,7 +66,7 @@ public class FlywayAfterHibernate {
     public ApplicationRunner runFlywayAfterHibernate(Flyway flyway) {
         return args -> {
             flyway.migrate();
-            logger.debug("✅ Flyway migrations executed after Hibernate initialization.");
+            logger.debug("Flyway migrations executed after Hibernate initialization.");
         };
     }
 }

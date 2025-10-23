@@ -4,7 +4,10 @@ import com.oiis.sso_starter.database.entities.sso.User;
 import com.oiis.sso_starter.database.repositories.sso.UsersRepository;
 import com.oiis.sso_starter.properties.database.DatabaseProperties;
 import jakarta.persistence.EntityManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -36,6 +39,8 @@ import java.util.Map;
 @EnableConfigurationProperties(DatabaseProperties.class)
 public class DatabaseAutoConfiguration {
 
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseAutoConfiguration.class);
+
     /**
      * properties
      */
@@ -46,7 +51,9 @@ public class DatabaseAutoConfiguration {
      * @param properties the properties
      */
     public DatabaseAutoConfiguration(DatabaseProperties properties) {
+        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "DatabaseAutoConfiguration");
         this.properties = properties;
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "DatabaseAutoConfiguration");
     }
 
     /**
@@ -56,12 +63,21 @@ public class DatabaseAutoConfiguration {
     @Bean
     @Primary
     public DataSource ssoDataSource() {
-        return org.springframework.boot.jdbc.DataSourceBuilder.create()
-                .url(properties.getDatasource().getJdbcUrl())
-                .username(properties.getDatasource().getUsername())
-                .password(properties.getDatasource().getPassword())
-                .driverClassName(properties.getDatasource().getDriverClassName())
-                .build();
+        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "ssoDataSource");
+        DataSource result = null;
+        try {
+            result = org.springframework.boot.jdbc.DataSourceBuilder.create()
+                    .url(properties.getDatasource().getJdbcUrl())
+                    .username(properties.getDatasource().getUsername())
+                    .password(properties.getDatasource().getPassword())
+                    .driverClassName(properties.getDatasource().getDriverClassName())
+                    .build();
+            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoDataSource");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "ssoDataSource");
+        return result;
     }
 
     /**
@@ -70,20 +86,27 @@ public class DatabaseAutoConfiguration {
      * @param builder the builder
      * @return the factory bean
      */
-    @Bean(name = "ssoEntityManagerFactory")
+    @Bean
     @Primary
     public LocalContainerEntityManagerFactoryBean ssoEntityManagerFactory(EntityManagerFactoryBuilder builder) {
-
-        Map<String, Object> jpaProps = new HashMap<>();
-        jpaProps.put("hibernate.dialect", properties.getHibernate().getDialect());
-        jpaProps.put("hibernate.globally_quoted_identifiers", properties.getHibernate().isGloballyQuotedIdentifiers());
-
-        return builder
-                .dataSource(ssoDataSource())
-                .packages(User.class)
-                .persistenceUnit("sso")
-                .properties(jpaProps)
-                .build();
+        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "ssoEntityManagerFactory");
+        LocalContainerEntityManagerFactoryBean result = null;
+        try {
+            Map<String, Object> jpaProps = new HashMap<>();
+            jpaProps.put("hibernate.dialect", properties.getHibernate().getDialect());
+            jpaProps.put("hibernate.globally_quoted_identifiers", properties.getHibernate().isGloballyQuotedIdentifiers());
+            result = builder
+                    .dataSource(ssoDataSource())
+                    .packages(User.class)
+                    .persistenceUnit("sso")
+                    .properties(jpaProps)
+                    .build();
+            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoEntityManagerFactory");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "ssoEntityManagerFactory");
+        return result;
     }
 
     /**
@@ -92,10 +115,19 @@ public class DatabaseAutoConfiguration {
      * @param ssoEntityManagerFactory the factory
      * @return the transaction manager
      */
-    @Bean(name = "ssoTransactionManager")
+    @Bean
     @Primary
-    public PlatformTransactionManager ssoTransactionManager(
-            @Qualifier("ssoEntityManagerFactory") EntityManagerFactory ssoEntityManagerFactory) {
-        return new JpaTransactionManager(ssoEntityManagerFactory);
+    @ConditionalOnMissingBean(name = "ssoTransactionManager")
+    public PlatformTransactionManager ssoTransactionManager(@Qualifier("ssoEntityManagerFactory") EntityManagerFactory ssoEntityManagerFactory) {
+        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "ssoTransactionManager");
+        JpaTransactionManager result = null;
+        try {
+            result = new JpaTransactionManager(ssoEntityManagerFactory);
+            logger.debug("no errors on  {}.{}", this.getClass().getSimpleName(), "ssoTransactionManager");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.debug("END {}.{}", this.getClass().getSimpleName(), "ssoTransactionManager");
+        return result;
     }
 }

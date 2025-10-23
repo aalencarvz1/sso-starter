@@ -152,20 +152,25 @@ public class AuthenticationService {
         DefaultDataSwap result = new DefaultDataSwap();
         try {
             if (StringUtils.hasText(userDto.getEmail()) && StringUtils.hasText(userDto.getPassword())) {
-                Optional<User> user = usersRepository.findByEmail(userDto.getEmail().trim().toLowerCase());
-                if (user.isEmpty()) {
+                if (mailService.isValidEmail(userDto.getEmail())) {
+                    Optional<User> user = usersRepository.findByEmail(userDto.getEmail().trim().toLowerCase());
+                    if (user.isEmpty()) {
 
-                    result = passworRulesCheck(userDto.getPassword());
-                    if (result.success) {
-                        User newUser = new User();
-                        newUser.setEmail(userDto.getEmail().trim().toLowerCase());
-                        newUser.setPassword(encoder.encode(userDto.getPassword()));
-                        usersRepository.save(newUser);
-                        result = getAuthDataResult(usersRepository.findByEmail(userDto.getEmail().trim().toLowerCase()), false, null, null, true, null);
+                        result = passworRulesCheck(userDto.getPassword());
+                        if (result.success) {
+                            User newUser = new User();
+                            newUser.setEmail(userDto.getEmail().trim().toLowerCase());
+                            newUser.setPassword(encoder.encode(userDto.getPassword()));
+                            usersRepository.save(newUser);
+                            result = getAuthDataResult(usersRepository.findByEmail(userDto.getEmail().trim().toLowerCase()), false, null, null, true, null);
+                        }
+                    } else {
+                        result.httpStatusCode = HttpStatus.CONFLICT.value();
+                        result.message = "user already exists";
                     }
                 } else {
-                    result.httpStatusCode = HttpStatus.CONFLICT.value();
-                    result.message = "user already exists";
+                    result.httpStatusCode = HttpStatus.EXPECTATION_FAILED.value();
+                    result.message = "invalid email";
                 }
             } else {
                 result.httpStatusCode = HttpStatus.EXPECTATION_FAILED.value();
@@ -226,20 +231,25 @@ public class AuthenticationService {
         DefaultDataSwap result = new DefaultDataSwap();
         try {
             if (StringUtils.hasText(passwordRecoverRequestDTO.getEmail())) {
-                Optional<User> user = usersRepository.findByEmail(passwordRecoverRequestDTO.getEmail().trim().toLowerCase());
-                if (user.isPresent()) {
-                    user.get().setLastPasswordChangeToken(jwtService.createToken(user.get()));
-                    usersRepository.save(user.get());
-                    String subject = "Password Recover";
-                    String text = "Follow this link to create a new password: " + passwordRecoverRequestDTO.getPasswordChangeInterfacePath() + "/" + user.get().getLastPasswordChangeToken();
-                    String html = "Follow this link to create a new password: <br /><a href=\"" + passwordRecoverRequestDTO.getPasswordChangeInterfacePath() + "/" + user.get().getLastPasswordChangeToken() + "\">Change password</a>";
+                if (mailService.isValidEmail(passwordRecoverRequestDTO.getEmail())) {
+                    Optional<User> user = usersRepository.findByEmail(passwordRecoverRequestDTO.getEmail().trim().toLowerCase());
+                    if (user.isPresent()) {
+                        user.get().setLastPasswordChangeToken(jwtService.createToken(user.get()));
+                        usersRepository.save(user.get());
+                        String subject = "Password Recover";
+                        String text = "Follow this link to create a new password: " + passwordRecoverRequestDTO.getPasswordChangeInterfacePath() + "/" + user.get().getLastPasswordChangeToken();
+                        String html = "Follow this link to create a new password: <br /><a href=\"" + passwordRecoverRequestDTO.getPasswordChangeInterfacePath() + "/" + user.get().getLastPasswordChangeToken() + "\">Change password</a>";
 
-                    mailService.sendEmail(passwordRecoverRequestDTO.getEmail().trim().toLowerCase(), subject, text, html);
+                        mailService.sendEmail(passwordRecoverRequestDTO.getEmail().trim().toLowerCase(), subject, text, html);
 
-                    result.success = true; //sendMail throws exception if error
+                        result.success = true; //sendMail throws exception if error
+                    } else {
+                        result.httpStatusCode = HttpStatus.EXPECTATION_FAILED.value();
+                        result.message = "user not found";
+                    }
                 } else {
                     result.httpStatusCode = HttpStatus.EXPECTATION_FAILED.value();
-                    result.message = "user not found";
+                    result.message = "invalid email";
                 }
             } else {
                 result.httpStatusCode = HttpStatus.EXPECTATION_FAILED.value();

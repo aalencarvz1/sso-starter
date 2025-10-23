@@ -50,8 +50,9 @@ public class SecurityAutoConfiguration {
      * @return the cors configuration
      */
     @Bean
-    @ConditionalOnMissingBean(CorsConfigurationSource.class)
+    //@ConditionalOnMissingBean(CorsConfigurationSource.class)
     public CorsConfigurationSource corsConfigurationSource() {
+        logger.debug("initializing xxxxxxxxxxxxxx cors configured");
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedMethods(List.of("*"));
@@ -59,6 +60,7 @@ public class SecurityAutoConfiguration {
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+        logger.debug("xxxxxxxxxxxxxx cors configured");
         return source;
     }
 
