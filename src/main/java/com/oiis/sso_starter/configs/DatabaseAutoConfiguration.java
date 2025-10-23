@@ -88,6 +88,7 @@ public class DatabaseAutoConfiguration {
      */
     @Bean
     @Primary
+    @ConditionalOnMissingBean(name = "ssoEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean ssoEntityManagerFactory(EntityManagerFactoryBuilder builder) {
         logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "ssoEntityManagerFactory");
         LocalContainerEntityManagerFactoryBean result = null;
