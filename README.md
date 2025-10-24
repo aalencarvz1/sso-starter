@@ -26,7 +26,7 @@ Add the dependency below to your `pom.xml`:
 <dependency>
     <groupId>io.github.aalencarvz1.libs.security.sso</groupId>
     <artifactId>sso-starter</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
 </dependency>
 ```
 

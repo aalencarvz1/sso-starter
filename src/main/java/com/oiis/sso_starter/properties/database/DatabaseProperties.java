@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.Properties;
+
 
 /**
  * database properties
@@ -18,7 +20,7 @@ public class DatabaseProperties {
 
     private boolean enabled = true;
     private Datasource datasource = new Datasource();
-    private Hibernate hibernate = new Hibernate();
+    private Jpa jpa = new Jpa();
     private Flyway flyway = new Flyway();
 
 
@@ -33,15 +35,26 @@ public class DatabaseProperties {
 
     @Getter
     @Setter
-    public static class Hibernate {
-        private String dialect = "org.hibernate.dialect.MySQLDialect";
-        private boolean globallyQuotedIdentifiers = true;
+    public static class Flyway {
+        private boolean enabled = false;
+        private String[] locations = {"classpath:db/migration"};
+        private boolean baselineOnMigrate = true;
     }
 
     @Getter
     @Setter
-    public static class Flyway {
-        private String[] locations = {"classpath:db/migration"};
-        private boolean baselineOnMigrate = true;
+    public static class Jpa {
+        private Hibernate hibernate = new Hibernate();
+        private Properties properties = new Properties();
+
+        @Getter
+        @Setter
+        public static class Hibernate {
+            private String ddlAuto = "none";
+            private String dialect = "org.hibernate.dialect.MySQLDialect";
+            private boolean globallyQuotedIdentifiers = true;
+        }
     }
+
+
 }

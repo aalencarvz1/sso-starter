@@ -12,7 +12,7 @@
 
     <groupId>io.github.aalencarvz1.libs.security.sso</groupId>
     <artifactId>sso-starter</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1</version>
 	<name>sso-starter</name>
 	<description>SSO starter</description>
 

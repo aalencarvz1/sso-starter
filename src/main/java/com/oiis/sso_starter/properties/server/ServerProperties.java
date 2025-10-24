@@ -1,11 +1,11 @@
-package com.oiis.sso_starter.properties.web;
+package com.oiis.sso_starter.properties.server;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * web properties
+ * server properties
  *
  * @author aalencarvz1
  * @version 1.0.0
@@ -13,7 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "sso.server")
 @Getter
 @Setter
-public class WebProperties {
+public class ServerProperties {
 
     private boolean enabled = true;
     private int port = 3000;
@@ -26,5 +26,6 @@ public class WebProperties {
         private boolean enabled = false;
         private String keyStore;
         private String keyStorePassword;
+        private String keyStoreType;
     }
 }

@@ -1,6 +1,6 @@
 package com.oiis.sso_starter.configs;
 
-import com.oiis.sso_starter.properties.web.WebProperties;
+import com.oiis.sso_starter.properties.server.ServerProperties;
 import org.apache.catalina.connector.Connector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,16 +24,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(prefix = "sso.server", name = "enabled", havingValue = "true", matchIfMissing = true)
 //@ConditionalOnClass({TomcatServletWebServerFactory.class})
-@EnableConfigurationProperties(WebProperties.class)
+@EnableConfigurationProperties(ServerProperties.class)
 @ComponentScan(basePackages = {
         "com.oiis.sso_starter.services.mail",
         "com.oiis.sso_starter.services.jwt",
         "com.oiis.sso_starter.services.auth",
         "com.oiis.sso_starter.controllers.rest.auth"
 })
-public class WebAutoConfiguration {
+public class ServerAutoConfiguration {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebAutoConfiguration.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServerAutoConfiguration.class);
 
 
     /**
@@ -44,7 +44,7 @@ public class WebAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(name = "ssoWebServerCustomizer")
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> ssoWebServerCustomizer(WebProperties props) {
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> ssoWebServerCustomizer(ServerProperties props) {
         logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "ssoWebServerCustomizer");
         WebServerFactoryCustomizer<TomcatServletWebServerFactory> result = null;
         try {

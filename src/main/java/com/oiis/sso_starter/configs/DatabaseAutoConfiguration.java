@@ -93,8 +93,8 @@ public class DatabaseAutoConfiguration {
         LocalContainerEntityManagerFactoryBean result = null;
         try {
             Map<String, Object> jpaProps = new HashMap<>();
-            jpaProps.put("hibernate.dialect", properties.getHibernate().getDialect());
-            jpaProps.put("hibernate.globally_quoted_identifiers", properties.getHibernate().isGloballyQuotedIdentifiers());
+            jpaProps.put("hibernate.dialect", properties.getJpa().getHibernate().getDialect());
+            jpaProps.put("hibernate.globally_quoted_identifiers", properties.getJpa().getHibernate().isGloballyQuotedIdentifiers());
             result = builder
                     .dataSource(ssoDataSource())
                     .packages(User.class)
