@@ -1,6 +1,6 @@
 # SSO Starter
 
-**SSO Starter** is a modular Java library built with **Spring Boot** that provides a complete infrastructure for **Single Sign-On (SSO)** authentication and authorization.  
+**SSO Starter** is a modular Java library built with **Spring Boot** that provides a complete infrastructure for **Single Sign-On (SSO)** authentication.  
 It enables centralized authentication across multiple applications with minimal setup, following Spring Boot's auto-configuration principles.
 
 There is also an implementation of a ready-to-use client library for Java backends/APIs that want to integrate with this SSO server. You can find its details, dependency, and GitHub repository in the [Base SSO Server Client Config](https://github.com/aalencarvz1/base-server-sso-client-security-config).
@@ -9,7 +9,7 @@ There is also an implementation of a ready-to-use client library for Java backen
 
 ## 🚀 Main Features
 
-- 🔐 Plug-and-play SSO authentication and authorization.
+- 🔐 Plug-and-play SSO authentication.
 - 🧱 Modular structure with automatic Spring Boot autoconfiguration.
 - ⚙️ Supports both `application.yml` and `application.properties`.
 - 🔄 Overridable beans and flexible configurations.
