@@ -38,4 +38,7 @@ public class User extends BaseSsoEntityModel {
     @Column(name = "generic_access_profile_id")
     private Long genericAccessProfileId;
 
+    @Column(name = "token_expiration_time")
+    private Long tokenExpirationTime;
+
 }

@@ -43,14 +43,19 @@ public class JwtService {
     public String createToken(User user, Long expiration) {
         String result = null;
         if (user != null) {
-            logger.debug("creating token for user {} {}",user.getId(),user.getEmail());
-            result = Jwts.builder()
+            if (user.getTokenExpirationTime() != null) {
+                expiration = user.getTokenExpirationTime();
+            }
+            logger.debug("creating token for user {}, email {}, expiration ",user.getId(),user.getEmail(), expiration);
+            JwtBuilder builder = Jwts.builder()
                     .signWith(key, SignatureAlgorithm.HS256) // usa a mesma key, mas novo builder
                     .setSubject(String.valueOf(user.getId()))
                     .claim("id", user.getId())
-                    .setIssuedAt(new Date())
-                    .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                    .compact();
+                    .setIssuedAt(new Date());
+            if (expiration > 0) {
+                builder.setExpiration(new Date(System.currentTimeMillis() + expiration));
+            }
+            result = builder.compact();
         }
         return result;
     }

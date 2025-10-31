@@ -49,7 +49,7 @@ public class FlywayAfterHibernate {
     @Bean
     @ConditionalOnMissingBean(name = "ssoFlyway")
     public Flyway ssoFlyway() {
-        logger.debug("INIT {}.{}", this.getClass().getSimpleName(), "ssoFlyway");
+        logger.debug("INIT {}.{} {}", this.getClass().getSimpleName(), "ssoFlyway", properties.getFlyway().getLocations());
         Flyway result = null;
         try {
             result = Flyway.configure()

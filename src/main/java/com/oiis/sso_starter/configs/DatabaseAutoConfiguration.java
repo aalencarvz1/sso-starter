@@ -93,7 +93,9 @@ public class DatabaseAutoConfiguration {
         LocalContainerEntityManagerFactoryBean result = null;
         try {
             Map<String, Object> jpaProps = new HashMap<>();
+            jpaProps.put("hibernate.hbm2ddl.auto", properties.getJpa().getHibernate().getDdlAuto());
             jpaProps.put("hibernate.dialect", properties.getJpa().getHibernate().getDialect());
+            //jpaProps.put("properties", properties.getJpa().getProperties());
             jpaProps.put("hibernate.globally_quoted_identifiers", properties.getJpa().getHibernate().isGloballyQuotedIdentifiers());
             result = builder
                     .dataSource(ssoDataSource())
