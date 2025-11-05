@@ -18,7 +18,8 @@ import org.springframework.context.annotation.Import;
         FlywayAfterHibernate.class,
         SecurityAutoConfiguration.class,
         MailAutoConfiguration.class,
-        ServerAutoConfiguration.class
+        ServerAutoConfiguration.class,
+        GoogleAuthAutoConfiguration.class
 })
 public class SsoAutoConfiguration {
 }

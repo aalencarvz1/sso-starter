@@ -1,4 +1,4 @@
-package com.oiis.sso_starter.controllers.rest.auth;
+package com.oiis.sso_starter.server.auth.dtos;
 
 import lombok.Getter;
 import lombok.Setter;

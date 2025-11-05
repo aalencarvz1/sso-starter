@@ -15,6 +15,8 @@ There is also an implementation of a ready-to-use client library for Java backen
 - 🔄 Overridable beans and flexible configurations.
 - 🗄️ Native integration with **Spring Data JPA**, **Flyway**, **Security**, and **Mail**.
 - 🧩 Extensible design for adding custom controllers and services.
+- 🌍 **Google Social Login Support** (from version `1.4.0`).
+
 
 ---
 
@@ -26,7 +28,7 @@ Add the dependency below to your `pom.xml`:
 <dependency>
     <groupId>io.github.aalencarvz1.libs.security.sso</groupId>
     <artifactId>sso-starter</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
 </dependency>
 ```
 
@@ -59,6 +61,12 @@ sso:
   security:
     enabled: true
 
+  auth:
+    google:
+      enabled: true
+      client-id: YOUR_GOOGLE_CLIENT_ID
+      client-secret: YOUR_GOOGLE_CLIENT_SECRET
+      
   mail:
     enabled: true
     host: smtp.gmail.com
@@ -100,16 +108,63 @@ This allows your project to modify or extend the SSO Starter’s behavior withou
 
 ## 🌐 Default Endpoints
 
-| Method | Endpoint | Description |
-|--------|-----------|-------------|
-| `POST` | `/auth/register` | Register new user |
-| `POST` | `/auth/login` | Authenticate user credentials |
-| `POST` | `/auth/refresh_token` | Refresh JWT token |
-| `POST` | `/auth/check_token` | Check JWT token |
-| `POST` | `/auth/send_email_recover_password` | Initiate password recovery process |
-| `POST` | `/auth/password_change` | Conclude password recovery process |
+| Method | Endpoint                            | Description                                                |
+|--------|-------------------------------------|------------------------------------------------------------|
+| `POST` | `/auth/register`                    | Register new user                                          |
+| `POST` | `/auth/login`                       | Authenticate user credentials                              |
+| `POST` | `/auth/refresh_token`               | Refresh JWT token                                          |
+| `POST` | `/auth/check_token`                 | Check JWT token                                            |
+| `POST` | `/auth/send_email_recover_password` | Initiate password recovery process                         |
+| `POST` | `/auth/password_change`             | Conclude password recovery process                         |
+| `POST` | `/auth/google/get_login_url`        | Get google login url                                       |
+| `POST` | `/auth/google/handle_code`          | Exange google oauth2 code by token and handle sso register |
 
 ---
+
+- 🌍 **Google Social Login Support Flux** (from version `1.4.0`).
+```text
++-----------+                     +-----------+                     +--------+
+|  Client   |                     |    SSO    |                     | Google |
++-----------+                     +-----------+                     +--------+
+      |                                   |                                  |
+      |--- (1) Request Google URL -------->                                  |
+      |                                   |                                  |
+      |<-- (2) Return login URL ----------|                                  |
+      |                                   |                                  |
+      |--- (3) Redirect user to Google ------------------------------------->|
+      |                                   |                                  |
+      |<-- (4) Redirect to FRONT redirect_uri with ?code=XYZ ----------------|
+      |                                   |                                  |
+      |--- (5) Send code to /auth/google/handle_code ----------------------->|
+      |                                   |                                  |
+      |                                   |-- (6) Exchange code for token -->|
+      |                                   |<-- (7) Receive token + user info |
+      |                                   |                                  |
+      |                                   |-- (8) Register/Update user DB -->|
+      |                                   |                                  |
+      |<-- (9) Return SSO token (JSON) --------------------------------------|
+      |                                   |                                  |
+```
+1. The client (frontend) requests the Google authentication URL from the SSO.
+
+2. The SSO returns the URL with client_id and redirect_uri.
+
+3. The frontend redirects the user to the Google login page.
+
+4. After logging in, Google redirects back to the frontend with a code.
+
+5. The frontend sends the code to the SSO's /auth/google/handle-code endpoint.
+
+6. The SSO exchanges the code for an access token with Google.
+
+7. The SSO receives the token and user information.
+
+8. The SSO registers/updates the user in the local database.
+
+8. The SSO returns an SSO JWT token to the frontend.
+
+---
+
 
 ## 🧰 Technologies Used
 

@@ -3,11 +3,11 @@ package com.oiis.sso_starter.services.auth;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oiis.libs.java.spring.commons.DefaultDataSwap;
-import com.oiis.sso_starter.controllers.rest.auth.*;
 import com.oiis.sso_starter.database.entities.sso.RecordStatus;
 import com.oiis.sso_starter.database.entities.sso.User;
 import com.oiis.sso_starter.database.repositories.sso.UsersRepository;
 import com.oiis.sso_starter.properties.security.SecurityProperties;
+import com.oiis.sso_starter.server.auth.dtos.*;
 import com.oiis.sso_starter.services.jwt.JwtService;
 import com.oiis.sso_starter.services.mail.MailService;
 import org.slf4j.Logger;
@@ -59,7 +59,8 @@ public class AuthenticationService {
         this.properties = properties;
     }
 
-    private DefaultDataSwap getAuthDataResult(
+
+    public DefaultDataSwap getAuthDataResult(
             Optional<User> user,
             Boolean checkPassword, String password,
             String token,

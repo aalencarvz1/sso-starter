@@ -25,7 +25,9 @@ public class SecurityProperties {
             "/auth/check_token",
             "/auth/send_email_recover_password",
             "/auth/password_change",
-            "/auth/refresh_token"
+            "/auth/refresh_token",
+            "/auth/google/get_login_url",
+            "/auth/google/handle_code"
     );
 
     private PasswordRules passwordRules = new PasswordRules();
@@ -36,5 +38,9 @@ public class SecurityProperties {
     @Setter
     public static class PasswordRules {
         private int minLength = 8;
+        private Boolean requireUppercase = true;
+        private Boolean requireLowercase = true;
+        private Boolean requireDigits = true;
+        private Boolean requireSpecial = false;
     }
 }

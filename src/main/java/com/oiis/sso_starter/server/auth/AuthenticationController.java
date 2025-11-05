@@ -1,6 +1,7 @@
-package com.oiis.sso_starter.controllers.rest.auth;
+package com.oiis.sso_starter.server.auth;
 
 import com.oiis.libs.java.spring.commons.DefaultDataSwap;
+import com.oiis.sso_starter.server.auth.dtos.*;
 import com.oiis.sso_starter.services.auth.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/auth")
-public class AuthenticationRestController {
+public class AuthenticationController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationRestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     /**
      * the auth service

@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
         "com.oiis.sso_starter.services.mail",
         "com.oiis.sso_starter.services.jwt",
         "com.oiis.sso_starter.services.auth",
-        "com.oiis.sso_starter.controllers.rest.auth"
+        "com.oiis.sso_starter.server.auth"
 })
 public class ServerAutoConfiguration {
 
