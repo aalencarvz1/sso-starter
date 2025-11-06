@@ -123,27 +123,23 @@ This allows your project to modify or extend the SSO Starter’s behavior withou
 
 - 🌍 **Google Social Login Support Flux** (from version `1.4.0`).
 ```text
-+-----------+                     +-----------+                     +--------+
-|  Client   |                     |    SSO    |                     | Google |
-+-----------+                     +-----------+                     +--------+
-      |                                   |                                  |
-      |--- (1) Request Google URL -------->                                  |
-      |                                   |                                  |
-      |<-- (2) Return login URL ----------|                                  |
-      |                                   |                                  |
-      |--- (3) Redirect user to Google ------------------------------------->|
-      |                                   |                                  |
-      |<-- (4) Redirect to FRONT redirect_uri with ?code=XYZ ----------------|
-      |                                   |                                  |
-      |--- (5) Send code to /auth/google/handle_code ----------------------->|
-      |                                   |                                  |
-      |                                   |-- (6) Exchange code for token -->|
-      |                                   |<-- (7) Receive token + user info |
-      |                                   |                                  |
-      |                                   |-- (8) Register/Update user DB -->|
-      |                                   |                                  |
-      |<-- (9) Return SSO token (JSON) --------------------------------------|
-      |                                   |                                  |
++-----------+                                                                     +-----------+                       +--------+
+|  Client   |                                                                     |    SSO    |                       | Google |
++-----------+                                                                     +-----------+                       +--------+
+      |                                                                                 |                                  |
+      |--- (1) Front Request to Sso Google Auth URL (sso/auth/google/get_login_url) --->|                                  |
+      |<-- (2) Sso Return Auth URL to Front---------------------------------------------|                                  |
+      |                                                                                 |                                  |
+      |--- (3) Front Redirect user to Google received url with add redirect_uri to callback------------------------------->|
+      |                                                                                 |         Google Auth process -----|
+      |<-- (4) Google Redirect to FRONT redirect_uri with ?code=XYZ -------------------------------------------------------|
+      |                                                                                 |                                  |
+      |--- (5) Front Send code to Sso (sso/auth/google/handle_code) ------------------->|                                  |
+      |                                                                                 |-- (6) Exchange code for token -->|
+      |                                                                                 |<- (7) Receive token + user info--|
+      |                                                                                 |-- (8) Register/Update user DB    |
+      |<-- (9) Sso Return token (JSON) -------------------------------------------------|                                  |
+      |                                                                                 |                                  |
 ```
 1. The client (frontend) requests the Google authentication URL from the SSO.
 
