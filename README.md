@@ -123,33 +123,41 @@ This allows your project to modify or extend the SSO Starter’s behavior withou
 
 - 🌍 **Google Social Login Support Flux** (from version `1.4.0`).
 ```text
-+-----------+                                                                     +-----------+                       +--------+
-|  Client   |                                                                     |    SSO    |                       | Google |
-+-----------+                                                                     +-----------+                       +--------+
-      |                                                                                 |                                  |
-      |--- (1) Front Request to Sso Google Auth URL (sso/auth/google/get_login_url) --->|                                  |
-      |<-- (2) Sso Return Auth URL to Front---------------------------------------------|                                  |
-      |                                                                                 |                                  |
-      |--- (3) Front Redirect user to Google received url with add redirect_uri to callback------------------------------->|
-      |                                                                                 |         Google Auth process -----|
-      |<-- (4) Google Redirect to FRONT redirect_uri with ?code=XYZ -------------------------------------------------------|
-      |                                                                                 |                                  |
-      |--- (5) Front Send code to Sso (sso/auth/google/handle_code) ------------------->|                                  |
-      |                                                                                 |-- (6) Exchange code for token -->|
-      |                                                                                 |<- (7) Receive token + user info--|
-      |                                                                                 |-- (8) Register/Update user DB    |
-      |<-- (9) Sso Return token (JSON) -------------------------------------------------|                                  |
-      |                                                                                 |                                  |
++-----------+                   +-----------+                   +-----------+                       +--------+
+|  Front    |                   |  Back/Api |                   |    SSO    |                       | Google |
++-----------+                   +-----------+                   +-----------+                       +--------+
+      |                               |                               |                                  |
+      |--- (1) Front request to Sso Google auth URL                   |                                  |
+      |    (/auth/google/get_login_url) ----------------------------->|                                  |
+      |<-- (2) Sso return auth URL to Front---------------------------|                                  |
+      |                               |                               |                                  |
+      |--- (3) Front redirect user to Google received url adding redirect_uri parameter to callback----->|
+      |                               |                               |     (4) Google auth process -----|
+      |<-- (5) Google redirect to Front redirect_uri with ?code=XYZ -------------------------------------|
+      |--- (6) Front get code from url parameter                      |                                  |
+      |--- (7) Front send code to Sso (/auth/google/handle_code) ---->|                                  |
+      |                               |                               |-- (8) Exchange code for token -->|
+      |                               |                               |<- (9) Receive token + user info--|
+      |                               |                               |-- (10) Register/Update user DB   |
+      |<-- (11) Sso return token (JSON) ------------------------------|                                  |
+      |                               |                               |                                  |
+      |--- (12) Request Back/Api      |                               |                                  |
+      |         (with token) -------->|                               |                                  |
+      |                               |--- (13) Check token on Sso--->|                                  |
+      |                               |<-- (14) Sso check result------|                                  |
+      |                               |--- (15) Process request       |                                  |
+      |<-- (16) Back responds --------|                               |                                  |
+      |                               |                               |                                  |
 ```
 1. The client (frontend) requests the Google authentication URL from the SSO.
 
-2. The SSO returns the URL with client_id and redirect_uri.
+2. The SSO returns the URL with client_id.
 
-3. The frontend redirects the user to the Google login page.
+3. The frontend add redirect_uri to url parameters and redirects the user to the Google login page.
 
-4. After logging in, Google redirects back to the frontend with a code.
+4. After logging in, Google redirects back to the frontend at redirect_uri indicated with a code.
 
-5. The frontend sends the code to the SSO's /auth/google/handle-code endpoint.
+5. The frontend get this code and sends to the SSO's /auth/google/handle_code endpoint.
 
 6. The SSO exchanges the code for an access token with Google.
 
@@ -157,7 +165,9 @@ This allows your project to modify or extend the SSO Starter’s behavior withou
 
 8. The SSO registers/updates the user in the local database.
 
-8. The SSO returns an SSO JWT token to the frontend.
+9. The SSO returns an SSO JWT token to the frontend.
+
+10. In the nexts requests to back, front send token autorization and back api check it on sso  
 
 ---
 
