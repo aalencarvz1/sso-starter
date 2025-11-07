@@ -148,9 +148,10 @@ This allows your project to modify or extend the SSO Starter’s behavior withou
 
 - 🌍 **Google Social Login Support Flux** (from version `1.4.0+`)
 ```text
-+-----------+                   +-----------+                   +-----------+                       +--------+
-|  Front    |                   |  Back/Api |                   |    SSO    |                       | Google |
-+-----------+                   +-----------+                   +-----------+                       +--------+
++--------------------+         +----------------+                +-----------+                     +--------+
+|     Front /        |         |  YOUR BACK/API |                | YOUR SSO  |                     | Google |
+| Request dispatcher |         |                |                |           |                     |        |
++--------------------+         +----------------+                +-----------+                     +--------+
       |                               |                               |                                  |
       |--- (1) Front request to Sso Google auth URL                   |                                  |
       |    (/auth/google/get_login_url) ----------------------------->|                                  |
