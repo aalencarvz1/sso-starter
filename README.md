@@ -124,25 +124,25 @@ This allows your project to modify or extend the SSO Starter’s behavior withou
 - 🔐 **Authentication flux**
 ```text
 +--------------------+                 +----------------+                 +-----------+
-|     Front /        |                 |  YOUT BACK/API |                 | YOUR SSO  |
-| Request dispatcher |                 |       *1       |                 |    *2     |
+|     Front /        |                 |  YOUR BACK/API |                 | YOUR SSO  |
+| Request dispatcher |                 |       1*       |                 |    2*     |
 +--------------------+                 +----------------+                 +-----------+
       |                                        |                               |
       |--- (1) Front request to Sso auth (login/register)                      |
       |    (/auth/login | /auth/register) ------------------------------------>|
       |<-- (2) Sso return auth respose with fail or token----------------------|
       |                                        |                               |
-      |--- (12) Request Back/Api               |                               |
+      |--- (3) Request Back/Api                |                               |
       |         (with token) ----------------->|                               |
-      |                                        |--- (13) Check token on Sso--->|
-      |                                        |<-- (14) Sso check result------|
-      |                                        |--- (15) Process request       |
-      |<-- (16) Back responds -----------------|                               |
+      |                                        |--- (4) Check token on Sso---->|
+      |                                        |<-- (5) Sso check result-------|
+      |                                        |--- (6) Process request        |
+      |<-- (7) Back responds ------- ----------|                               |
       |                                        |                               |
 ```
-1* If is java application, then you can extends the class [Base SSO Server Client Config](https://github.com/aalencarvz1/base-server-sso-client-security-config) and your routes are protecteds by authorization check. If your back end api is not java, then you can follow this flux diagram to implement communication between your Sso and your front or request dispatcher and your back end api.
+1* If your back end api is java application, then you can extends the class [Base SSO Server Client Config](https://github.com/aalencarvz1/base-server-sso-client-security-config) and your routes are protecteds by authorization check. If your back end api is not java, then you can follow this flux diagram to implement communication between your Sso and your front or request dispatcher and your back end api.
 
-2* This starter is plug-and-play, like spring starts. Then only necessities add this starter on your dependencies and your application is a Sso application.
+2* This starter project is plug-and-play, just like Spring's starter components. So, simply add this starter to your dependencies and your application will become an SSO application.
 
 ---
 
