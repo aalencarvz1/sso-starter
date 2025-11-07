@@ -9,7 +9,7 @@ There is also an implementation of a ready-to-use client library for Java backen
 
 ## 🚀 Main Features
 
-- 🔐 Plug-and-play SSO authentication.
+- 🔐 Plug-and-play SSO authentication (starter).
 - 🧱 Modular structure with automatic Spring Boot autoconfiguration.
 - ⚙️ Supports both `application.yml` and `application.properties`.
 - 🔄 Overridable beans and flexible configurations.
@@ -121,7 +121,7 @@ This allows your project to modify or extend the SSO Starter’s behavior withou
 
 ---
 
-- 🌍 **Authentication flux**
+- 🔐 **Authentication flux**
 ```text
 +--------------------+                 +----------------+                 +-----------+
 |     Front /        |                 |  YOUT BACK/API |                 | YOUR SSO  |
