@@ -9,13 +9,13 @@ There is also an implementation of a ready-to-use client library for Java backen
 
 ## 🚀 Main Features
 
-- 🔐 Plug-and-play SSO authentication.
+- 🔐 Plug-and-play SSO authentication (starter).
 - 🧱 Modular structure with automatic Spring Boot autoconfiguration.
 - ⚙️ Supports both `application.yml` and `application.properties`.
 - 🔄 Overridable beans and flexible configurations.
 - 🗄️ Native integration with **Spring Data JPA**, **Flyway**, **Security**, and **Mail**.
 - 🧩 Extensible design for adding custom controllers and services.
-- 🌍 **Google Social Login Support** (from version `1.4.0`).
+- 🌍 **Google Social Login Support** (from version `1.4.0+`).
 
 
 ---
@@ -121,11 +121,37 @@ This allows your project to modify or extend the SSO Starter’s behavior withou
 
 ---
 
-- 🌍 **Google Social Login Support Flux** (from version `1.4.0`).
+- 🔐 **Authentication flux**
 ```text
-+-----------+                   +-----------+                   +-----------+                       +--------+
-|  Front    |                   |  Back/Api |                   |    SSO    |                       | Google |
-+-----------+                   +-----------+                   +-----------+                       +--------+
++--------------------+                 +----------------+                 +-----------+
+|     Front /        |                 |  YOUR BACK/API |                 | YOUR SSO  |
+| Request dispatcher |                 |       1*       |                 |    2*     |
++--------------------+                 +----------------+                 +-----------+
+      |                                        |                               |
+      |--- (1) Front request to Sso auth (login/register)                      |
+      |    (/auth/login | /auth/register) ------------------------------------>|
+      |<-- (2) Sso return auth respose with fail or token----------------------|
+      |                                        |                               |
+      |--- (3) Request Back/Api                |                               |
+      |         (with token) ----------------->|                               |
+      |                                        |--- (4) Check token on Sso---->|
+      |                                        |<-- (5) Sso check result-------|
+      |                                        |--- (6) Process request        |
+      |<-- (7) Back responds ------- ----------|                               |
+      |                                        |                               |
+```
+1* If your back end api is java application, then you can extends the class [Base SSO Server Client Config](https://github.com/aalencarvz1/base-server-sso-client-security-config) and your routes are protecteds by authorization check. If your back end api is not java, then you can follow this flux diagram to implement communication between your Sso and your front or request dispatcher and your back end api.
+
+2* This starter project is plug-and-play, just like Spring's starter components. So, simply add this starter to your dependencies and your application will become an SSO application.
+
+---
+
+- 🌍 **Google Social Login Support Flux** (from version `1.4.0+`)
+```text
++--------------------+         +----------------+                +-----------+                     +--------+
+|     Front /        |         |  YOUR BACK/API |                | YOUR SSO  |                     | Google |
+| Request dispatcher |         |                |                |           |                     |        |
++--------------------+         +----------------+                +-----------+                     +--------+
       |                               |                               |                                  |
       |--- (1) Front request to Sso Google auth URL                   |                                  |
       |    (/auth/google/get_login_url) ----------------------------->|                                  |
