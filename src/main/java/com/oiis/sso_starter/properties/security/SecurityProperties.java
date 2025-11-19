@@ -27,7 +27,9 @@ public class SecurityProperties {
             "/auth/password_change",
             "/auth/refresh_token",
             "/auth/google/get_login_url",
-            "/auth/google/handle_code"
+            "/auth/google/handle_code",
+            "/auth/github/get_login_url",
+            "/auth/github/handle_code"
     );
 
     private PasswordRules passwordRules = new PasswordRules();

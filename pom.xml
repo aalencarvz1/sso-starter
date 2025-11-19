@@ -12,7 +12,7 @@
 
     <groupId>io.github.aalencarvz1.libs.security.sso</groupId>
     <artifactId>sso-starter</artifactId>
-	<version>1.4.1</version>
+	<version>1.5.0</version>
 	<name>sso-starter</name>
     <description>Spring Boot Starter library for Single Sign-On (SSO) authentication server.</description>
     <url>https://github.com/aalencarvz1/sso-starter</url>
