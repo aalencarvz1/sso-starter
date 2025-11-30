@@ -24,7 +24,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(MailProperties.class)
 @ConditionalOnProperty(prefix = "sso.mail", name = "enabled", havingValue = "true", matchIfMissing = true)
-@Import(org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration.class)
+//@Import(org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration.class) // spring 3.5.6
+@Import(org.springframework.boot.mail.autoconfigure.MailSenderAutoConfiguration.class) //spring 4.0.0
 @ComponentScan(basePackages = "com.oiis.sso_starter.services.mail")
 public class MailAutoConfiguration {
 

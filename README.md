@@ -218,7 +218,7 @@ The google and github oauth2 work equals:
 ## 🧰 Technologies Used
 
 - **Java 17+**
-- **Spring Boot 3.5+**
+- **Spring Boot 4+**
 - **Spring Security**
 - **Json Web Token (Jwt)**
 - **BCrypt**
