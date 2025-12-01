@@ -31,7 +31,7 @@ Add the dependency below to your `pom.xml`:
 <dependency>
     <groupId>io.github.aalencarvz1.libs.security.sso</groupId>
     <artifactId>sso-starter</artifactId>
-    <version>1.5.0</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
@@ -217,7 +217,7 @@ The google and github oauth2 work equals:
 
 ## 🧰 Technologies Used
 
-- **Java 17+**
+- **Java 21+**
 - **Spring Boot 4+**
 - **Spring Security**
 - **Json Web Token (Jwt)**

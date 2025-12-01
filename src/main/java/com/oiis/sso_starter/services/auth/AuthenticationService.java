@@ -1,7 +1,6 @@
 package com.oiis.sso_starter.services.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oiis.libs.java.spring.commons.DefaultDataSwap;
 import com.oiis.sso_starter.database.entities.sso.RecordStatus;
 import com.oiis.sso_starter.database.entities.sso.User;
@@ -19,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,13 +50,14 @@ public class AuthenticationService {
     @Autowired
     MailService mailService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
+
 
     private static final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public AuthenticationService(SecurityProperties properties) {
+    public AuthenticationService(SecurityProperties properties, ObjectMapper objectMapper) {
         this.properties = properties;
+        this.objectMapper = objectMapper;
     }
 
 

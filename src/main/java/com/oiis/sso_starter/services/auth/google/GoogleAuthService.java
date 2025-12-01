@@ -1,7 +1,6 @@
 package com.oiis.sso_starter.services.auth.google;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oiis.libs.java.spring.commons.DefaultDataSwap;
 import com.oiis.sso_starter.database.entities.sso.User;
 import com.oiis.sso_starter.database.repositories.sso.UsersRepository;
@@ -18,6 +17,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import tools.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -38,7 +38,8 @@ public class GoogleAuthService {
     private static final String GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
     private static final String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
 
 
     private GoogleAuthProperties properties;
@@ -50,12 +51,14 @@ public class GoogleAuthService {
             GoogleAuthProperties properties,
             SecurityProperties securityProperties,
             AuthenticationService authenticationService,
-            UsersRepository usersRepository
-    )  throws Exception{
+            UsersRepository usersRepository,
+            ObjectMapper objectMapper
+    ) {
         this.properties = properties;
         this.securityProperties = securityProperties;
         this.authenticationService = authenticationService;
         this.usersRepository = usersRepository;
+        this.objectMapper = objectMapper;
     }
 
     public DefaultDataSwap getLoginUrl() {
@@ -98,7 +101,7 @@ public class GoogleAuthService {
             logger.debug("Response: {}", response.body());
 
 
-            Map<String, Object> json = mapper.readValue(response.body(), Map.class);
+            Map<String, Object> json = objectMapper.readValue(response.body(), Map.class);
             String idToken = (String) json.get("id_token");
 
             logger.debug("id_token: {}", idToken);
@@ -143,7 +146,7 @@ public class GoogleAuthService {
             throw new RuntimeException("Invalid token: " + response.body());
         }
 
-        return mapper.readValue(response.body(), Map.class);
+        return objectMapper.readValue(response.body(), Map.class);
 
     }
 }

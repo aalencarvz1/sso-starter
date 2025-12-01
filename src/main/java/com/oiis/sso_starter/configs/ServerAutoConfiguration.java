@@ -7,8 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-//import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory; //spring 3.5.6
-import org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory; //spring 4.0.0
+import org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.Ssl;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;

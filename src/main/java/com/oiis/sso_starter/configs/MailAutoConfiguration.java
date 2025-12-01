@@ -1,7 +1,6 @@
 package com.oiis.sso_starter.configs;
 
 import com.oiis.sso_starter.properties.mail.MailProperties;
-import jakarta.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

@@ -1,6 +1,5 @@
 package com.oiis.sso_starter.services.auth.github;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oiis.libs.java.spring.commons.DefaultDataSwap;
 import com.oiis.sso_starter.database.entities.sso.User;
 import com.oiis.sso_starter.database.repositories.sso.UsersRepository;
@@ -17,6 +16,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import tools.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -38,7 +38,8 @@ public class GitHubAuthService {
     private static final String GITHUB_USER_URL = "https://api.github.com/user";
     private static final String GITHUB_USER_EMAIL_URL = "https://api.github.com/user/emails";
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
 
     private GitHubAuthProperties properties;
     private SecurityProperties securityProperties;
@@ -49,12 +50,14 @@ public class GitHubAuthService {
             GitHubAuthProperties properties,
             SecurityProperties securityProperties,
             AuthenticationService authenticationService,
-            UsersRepository usersRepository
-    ) throws Exception {
+            UsersRepository usersRepository,
+            ObjectMapper objectMapper
+    ) {
         this.properties = properties;
         this.securityProperties = securityProperties;
         this.authenticationService = authenticationService;
         this.usersRepository = usersRepository;
+        this.objectMapper = objectMapper;
     }
 
     public DefaultDataSwap getLoginUrl() {
@@ -127,7 +130,7 @@ public class GitHubAuthService {
 
         logger.debug("GitHub token response: {}", response.body());
 
-        Map<String, Object> json = mapper.readValue(response.body(), Map.class);
+        Map<String, Object> json = objectMapper.readValue(response.body(), Map.class);
 
         if (json.containsKey("error")) {
             throw new Exception("GitHub OAuth error: " + json.get("error_description"));
@@ -151,7 +154,7 @@ public class GitHubAuthService {
             throw new RuntimeException("Failed to get user info: " + response.body());
         }
 
-        return mapper.readValue(response.body(), Map.class);
+        return objectMapper.readValue(response.body(), Map.class);
     }
 
     private String getEmail(Map<String, Object> userInfo, String accessToken) throws Exception {
@@ -180,7 +183,7 @@ public class GitHubAuthService {
         }
 
         // GitHub retorna uma lista de emails
-        Object[] emails = mapper.readValue(response.body(), Object[].class);
+        Object[] emails = objectMapper.readValue(response.body(), Object[].class);
 
         // Procura pelo email primário e verificado
         for (Object emailObj : emails) {
