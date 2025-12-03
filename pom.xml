@@ -12,9 +12,12 @@
 
     <groupId>io.github.aalencarvz1.libs.security.sso</groupId>
     <artifactId>sso-starter</artifactId>
-	<version>2.0.0</version>
+	<version>2.0.1</version>
 	<name>sso-starter</name>
-    <description>Spring Boot Starter library for Single Sign-On (SSO) authentication server.</description>
+    <description>
+        ⚠️ DEPRECATED — This artifact is no longer maintained.
+        Please migrate to the new library at: com.sysnormal.starters.security.sso.spring:sso-starter
+    </description>
     <url>https://github.com/aalencarvz1/sso-starter</url>
 
     <organization>
@@ -50,7 +53,7 @@
         <java.version>21</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-	</properties>
+    </properties>
 
 	<dependencies>
 		<dependency>
