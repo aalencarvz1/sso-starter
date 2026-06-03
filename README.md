@@ -7,7 +7,7 @@
 ### 🚧 This repository is no longer maintained.
 
 Please use the new active repository instead:  
-👉 [**sso-starter**](https://github.com/sysnormal1/java-spring-sso-starter.git)
+👉 [**sso-starter**](https://github.com/sysnormal1/sysnormal-spring-boot-starter-sso.git)
 
 ---
 
